@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>St. Ignatius Of Loyola - Results Portal</title>
+<style>
+*{box-sizing:border-box;font-size:20px;}
+body{margin:0;background:#eef2f0}
+.header{background: green;color:#000;text-align:center;padding:20px 10px}
+.header h1{margin:5px 0 0;font-size:25px;color:#fff;border-radius:20px}
+.header p{margin:4px 0;opacity:.9}
+.motto{font-style:italic;color:yellow;font-style:underline}
+.nav{display:flex;justify-content:center;gap:8px;padding:12px;background:white;box-shadow:0 2px 5px #ccc;position:sticky;top:0;flex-wrap:wrap}
+.nav button{padding:10px 18px;border:none;border-radius:20px;cursor:pointer;font-weight:bold;background:#e0e0e0}
+.nav button.active{background:#0b3d2e;color:white}
+.container{max-width:560px;margin:15px auto;padding:0 12px;padding-bottom:30px}
+.card{background: #8a8888;padding:20px;border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,.1);margin-bottom:15px}
+h2{marb gin-top:0;color:#000 ;text-align:center;background-color:aqua}
+h3{color:#000;margin-bottom:5px;background-color:aqua;text-align:center}
+label{font-size:13px;font-weight:bold}
+input,select{width:100%;padding:12px;margin:6px 0 12px;border:1px solid #ccc;border-radius:8px;font-size:15px}
+.btn{width:100%;padding:13px;border:none;border-radius:8px;background:#0b3d2e;color:white;font-weight:bold;font-size:16px;cursor:pointer}
+.btn-gold{background:#c9a227;color:#000}
+.btn-red{background:#b71c1c}
+.btn-small{padding:8px 12px;font-size:13px;width:auto}
+table{width:100%;border-collapse:collapse;margin-top:10px}
+th,td{border:1px solid #ddd;padding:9px;text-align:left;font-size:14px}
+th{background:#0b3d2e;color:white}
+.hidden{display:none}
+.badge{display:inline-block;background:#e8f5e9;color:#0b3d2e;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:bold}
+.subject-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.dash-box{background:#f7f7f7;border:1px solid #dddddd;border-radius:10px;padding:14px;text-align:center}
+.dash-box b{font-size:22px;color:#0b3d2e;display:block}
+.dash-box span{font-size:12px;color:#555}
+.tabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+.tabs button{flex:1;padding:10px;border:none;border-radius:8px;background:#eee;font-weight:bold;cursor:pointer}
+.tabs button.active{background:#0b3d2e;color:white}
+.footer{text-align:center;font-size:12px;color:#000;margin-top:20px}
+@media print{ .nav,.no-print{display:none!important} .card{box-shadow:none} }
+</style>
+</head>
+<body>
+
+<div class="header">
+<div style="text-align:center;margin-bottom:8px">
+  <p style="background-color:#fff; width:3.5cm;border-radius:10px;"><marquee direction="right"><b>WELCOME!</b></marquee></p>
+<div style="width:110px;margin:0 auto;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;color:white;box-shadow:0 4px 10px rgba(0,0,0,0.3)">
+</div>
+</div>
+<h1>ST. IGNATIUS OF LOYOLA
+BOARDING SECONDARY SCHOOL</h1><br>
+<p class="motto">"WITH GOD'S HELP"</p><br>
+<p style="font-size:13px;color:#000;background-color:#fff;">📍CHITIPA, NTHALIRE<br/>Post Office Box 2<br><b>THE DIOCESE OF KARONGA</b></p><br><b><p style="background-color:aqua;">EXAMINATION PORTAL RESULTS</b></p>
+</div>
+
+<div class="nav no-print">
+<button id="btnStudent" class="active" onclick="showPage('student')">CHECK RESULTS</button>
+<button id="btnAdmin" onclick="showPage('adminLogin')">ADMIN</button>
+</div>
+
+<div class="container">
+
+<!-- STUDENT CHECK -->
+<div id="page-student" class="card">
+<h2>Check Your Results</h2>
+<label>Exam Number</label>
+<input id="s_exam" placeholder="IG/001">
+<label>Class</label>
+<select id="s_class"><option>FORM 1</option><option>FORM 2</option><option>FORM 3</option><option>FORM 4</option></select>
+<label>Term</label>
+<select id="s_term"><option>TERM 1</option><option>TERM 2</option><option>TERM 3</option></select>
+<label>PIN</label>
+<input id="s_pin" type="password" placeholder="1234">
+<button class="btn" onclick="checkResult()">VIEW RESULTS</button>
+<p style="text-align:center;font-size:13px;color:#000;background-color:aqua"><b>PLEASE FILL ALL DETAILS REQUIRED....</b></p>
+</div>
+
+<!-- RESULT SLIP -->
+<div id="page-result" class="card hidden">
+<div style="text-align:center"><h2>RESULTS📑</h2><p style="margin:0;font-size:13px">ST. IGNATIUS OF LOYOLA BOARDING SEC SCHOOL</p><p id="r_term" class="badge"></p></div>
+<hr>
+<p><b>NAME:</b> <span id="r_name"></span><br><b>EXM NO::</b> <span id="r_exam"></span><br><b>Class:</b> <span id="r_class"></span><br><b>Grading:</b> <span id="r_grading"></span></p>
+<table><tr><th>SUBJECT</th><th>MARKS</th><th>GRADE</th></tr><tbody id="r_table"></tbody></table>
+<div style="display:flex;justify-content:space-between;margin-top:12px;flex-wrap:wrap;gap:8px">
+<div><b>AVERAGE:</b> <span id="r_avg"></span>%</div>
+<div><b>POSITION:</b> <span id="r_pos" style="color:#0b3d2e;font-weight:bold"></span></div>
+<div><b>DIVISION:</b> <span id="r_div"></span></div>
+</div>
+<p id="r_avgNote" style="text-align:center;font-size:12px;color:#000;margin:5px 0 0"></p>
+<p id="r_best" style="text-align:center;font-size:13px;color:#555"></p>
+<p id="r_remark" style="text-align:center;font-weight:bold;color:#0b3d2e"></p>
+<div class="no-print" style="display:flex;gap:8px;margin-top:10px"><button class="btn btn-gold" onclick="downloadPDF()">Download PDF</button><button class="btn" onclick="showPage('student')">Back</button></div>
+</div>
+
+<!-- ADMIN LOGIN -->
+<div id="page-adminLogin" class="card hidden">
+<h2>🔐ADMIN LOGIN</h2>
+<label>ADMIN PASSWORD</label>
+<input id="adminPass" type="password" placeholder="Enter Admin Password🔐">
+<button class="btn" onclick="adminLogin()">LOGIN AS ADMIN</button>
+<p style="text-align:center;font-size:13px;color:#fff"><b>THIS IS FOR THE TEACHERS ONLY</b></p>
+</div>
+
+<!-- ADMIN AREA -->
+<div id="page-admin" class="card hidden">
+<h2>WELCOME TO ADMIN</h2>
+<div class="tabs no-print">
+<button id="tabAdd" class="active" onclick="showAdminTab('add')">Add Results</button>
+<button id="tabDash" onclick="showAdminTab('dash')">Dashboard</button>
+<button id="tabList" onclick="showAdminTab('list')">All Students</button>
+</div>
+
+<!-- ADD TAB -->
+<div id="admin-add">
+<label>STUDENT FULL NAME</label>
+<input id="a_name" placeholder="Ronald Ronnex">
+<label>EXAM NO</label>
+<input id="a_exam" placeholder="IG/001">
+<div style="display:flex;gap:8px">
+<div style="flex:1"><label>CLASS</label><select id="a_class"><option>FORM 1</option><option>FORM 2</option><option>FORM 3</option><option>FORM 4</option></select></div>
+<div style="flex:1"><label>PIN</label><input id="a_pin" placeholder="1234"></div>
+</div>
+<label>SELECT TERM RESULTS</label>
+<select id="a_term"><option>TERM 1</option><option>TERM 2</option><option>TERM 3</option></select>
+<label>ENTER MARKS</label>
+<div class="subject-grid" id="subjectInputs"></div>
+<p id="saveMsg" style="font-size:13px;color:#000;text-align:center;background-color:aqua"><b>MAKE SURE ALL STUDENTS MARKS ARE ENTERED CORRECTLY BEFORE SAVING?</b></p>
+<button class="btn" onclick="saveStudent()">SAVE RESULTS</button>
+</div>
+
+<!-- DASHBOARD TAB -->
+<div id="admin-dash" class="hidden">
+<h3>THE SCHOOL DASHBOARD</h3>
+<div class="dash-grid">
+<div class="dash-box"><b id="d_total">0</b><span>TOTAL STUDENTS</span></div>
+<div class="dash-box"><b id="d_avg">0%</b><span>SCHOOL AVERAGE</span></div>
+<div class="dash-box"><b id="d_bestName">-</b><span>BEST STUDENT</span><br><small id="d_bestDetail"></small></div>
+<div class="dash-box"><b id="d_topClass">-</b><span>BEST PERFORMING CLASS</span></div>
+</div>
+<h3 style="margin-top:18px">Class Averages - Term 1</h3>
+<table><tr><th>CLASS</th><th>STUDENTS</th><th>AVERAGE</th></tr><tbody id="d_classTable"></tbody></table>
+<p style="font-size:12px;color:#000;background-color:aqua"><b>DASHBOARD IS CALCULATED FROM TERM 1 RESULTS. FORM 3 & 4 AVERAGES ARE FROM 6 BEST SUBJECTS.</b></p>
+</div>
+
+<!-- ALL STUDENTS TAB - ADMIN ONLY -->
+<div id="admin-list" class="hidden">
+<h3>ALL STUDENTS</h3>
+<input id="searchBox" placeholder="Search by name or exam..." onkeyup="renderList()">
+<div id="listBox"></div>
+<p style="font-size:12px;color:#000;text-align:center;color:#000;background-color:aqua;"><b>THE TABLE SHOWS ALL SAVED STUDENTS</b></p>
+<button class="btn btn-green" onclick="resetData()" style="margin-top:15px">RESET DATA</button>
+</div>
+
+<button class="btn btn-red" onclick="showPage('student')" style="margin-top:15px">LOGOUT</button>
+</div>
+
+</div>
+<div class="footer"> &copy; 2026/27 ACADEMIC YEAR ST.IGNATIUS OF LOYOLA BOARDING SEC SCHOOL<hr/> DEVELOPED BY RONALD RONNEX<br><br>
+  <p style="color:#000;"><marquee>FOR MORE INFO: FACEBOOK: <u>RONALD RONNEX</u> | CONTACTS📞/WHAT'S APP: <u>+265990381488/+265894608748</u> | Email✉: <i>ronaldmtafya6@gmail.com/mtafyaronnex@icloud.com</i></marquee></p>
+</div>
+
+<script>
+const SUBJECTS = ["ENGLISH","CHICHEWA","MATHEMATICS","BIOLOGY","CHEMISTRY","PHYSICS","AGRICULTURE","GEOGRAPHY","HISTORY","BIBLE KNOWLEDGE","FRENCH","SOCIAL STUDIES"];
+const ADMIN_PASSWORD = "IG2026/27SCHOOL";
+
+let defaultStudents = [
+ {name:"Ronald Ronnex", exam:"IG/001", class:"Form 3", pin:"1234", resultsByTerm:{
+   "Term 1":{English:95,Chichewa:85,Mathematics:88,Biology:82,Chemistry:78,Physics:75,Agriculture:88,Geography:74,History:70,"Bible Knowledge":82,"Computer Studies":90,"Life Skills":75},
+   "Term 2":{English:88,Chichewa:82,Mathematics:80,Biology:78,Chemistry:72,Physics:70,Agriculture:85,Geography:76,History:72,"Bible Knowledge":84,"Computer Studies":88,"Life Skills":78}
+ }},
+ 
+];
+
+let students = JSON.parse(localStorage.getItem('ignatius_v4')) || JSON.parse(JSON.stringify(defaultStudents));
+function save(){ localStorage.setItem('ignatius_v4', JSON.stringify(students)); }
+
+function getGrade(m, studentClass){
+  m = parseInt(m);
+  if(studentClass === "Form 3" || studentClass === "Form 4"){
+    if(m >= 90) return "1";
+    if(m >= 80) return "2";
+    if(m >= 70) return "3";
+    if(m >= 60) return "4";
+    if(m >= 50) return "5";
+    if(m >= 40) return "6";
+    if(m >= 30) return "7";
+    if(m >= 20) return "8";
+    return "9";
+  }
+  if(m >= 80) return "A";
+  if(m >= 70) return "B";
+  if(m >= 60) return "C";
+  if(m >= 50) return "D";
+  if(m >= 40) return "E";
+  return "F";
+}
+function getDiv(avg, cls){
+  if(cls==="Form 3"||cls==="Form 4"){
+    if(avg>=80) return "Division 1";
+    if(avg>=60) return "Division 2";
+    if(avg>=50) return "Division 3";
+    if(avg>=40) return "Division 4";
+    return "Fail";
+  }
+  if(avg>=75) return "Division 1 - Excellent";
+  if(avg>=60) return "Division 2 - Very Good";
+  if(avg>=50) return "Division 3 - Good";
+  if(avg>=40) return "Division 4 - Pass";
+  return "Fail";
+}
+
+// NEW RULE: Form 3 & 4 = Average of 6 Best Subjects. Form 1 & 2 = Average of All Subjects.
+function getAverage(results, studentClass){
+  let marks = [];
+  for(let sub of SUBJECTS){ marks.push(results[sub]||0); }
+  if(studentClass === "Form 3" || studentClass === "Form 4"){
+    marks.sort((a,b)=> b-a);
+    let best6 = marks.slice(0,6);
+    let total = best6.reduce((a,b)=> a+b, 0);
+    return total / 6;
+  }
+  let total = marks.reduce((a,b)=> a+b, 0);
+  return total / marks.length;
+}
+
+// Calculate Position - Uses same 6 Best Subjects rule for Form 3 & 4
+function getPosition(student, term){
+  let sameClass = students.filter(s=> s.class===student.class && s.resultsByTerm && s.resultsByTerm[term]);
+  let ranked = sameClass.map(s=> ({exam:s.exam, avg:getAverage(s.resultsByTerm[term], s.class)})).sort((a,b)=> b.avg - a.avg);
+  let idx = ranked.findIndex(r=> r.exam===student.exam);
+  return {pos: idx+1, total: ranked.length};
+}
+
+function showPage(page){
+ ["student","result","adminLogin","admin"].forEach(p=> document.getElementById('page-'+p).classList.add('hidden'));
+ document.getElementById('page-'+page).classList.remove('hidden');
+ document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
+ if(page==='student') document.getElementById('btnStudent').classList.add('active');
+ if(page==='adminLogin'||page==='admin') document.getElementById('btnAdmin').classList.add('active');
+ window.scrollTo(0,0);
+}
+function showAdminTab(tab){
+ ["add","dash","list"].forEach(t=> document.getElementById('admin-'+t).classList.add('hidden'));
+ document.getElementById('admin-'+tab).classList.remove('hidden');
+ ["tabAdd","tabDash","tabList"].forEach(t=> document.getElementById(t).classList.remove('active'));
+ if(tab==='add') document.getElementById('tabAdd').classList.add('active');
+ if(tab==='dash'){ document.getElementById('tabDash').classList.add('active'); renderDashboard(); }
+ if(tab==='list'){ document.getElementById('tabList').classList.add('active'); renderList(); }
+}
+
+function checkResult(){
+ let exam=document.getElementById('s_exam').value.trim().toUpperCase();
+ let pin=document.getElementById('s_pin').value.trim();
+ let term=document.getElementById('s_term').value;
+ let s=students.find(x=>x.exam===exam && x.pin===pin);
+ if(!s){ alert("Wrong Exam Number or PIN"); return; }
+ let termResults = s.resultsByTerm ? s.resultsByTerm[term] : null;
+ if(!termResults){ alert("No results for "+term+" yet. Please ask your teacher."); return; }
+ document.getElementById('r_name').innerText=s.name;
+ document.getElementById('r_exam').innerText=s.exam;
+ document.getElementById('r_class').innerText=s.class+" | "+term;
+ document.getElementById('r_term').innerText=term+" Results";
+ document.getElementById('r_grading').innerText = (s.class==="Form 3"||s.class==="Form 4") ? "Grading: 1-9 (90-100=1, 80-89=2...)" : "Grading: A-F";
+ let html=""; let bestSub=""; let bestMark=-1;
+ for(let sub of SUBJECTS){
+   let m = termResults[sub] || 0;
+   if(m>bestMark){ bestMark=m; bestSub=sub; }
+   html+=`<tr><td>${sub}</td><td>${m}</td><td>${getGrade(m, s.class)}</td></tr>`;
+ }
+ document.getElementById('r_table').innerHTML=html;
+ let avg = getAverage(termResults, s.class).toFixed(1);
+ document.getElementById('r_avg').innerText=avg;
+ document.getElementById('r_div').innerText=getDiv(avg, s.class);
+ document.getElementById('r_avgNote').innerText = (s.class==="Form 3"||s.class==="Form 4") ? "AVERAGE CALCULATED FROM 6 BEST SUBJECTS" : "Average calculated from All Subjects";
+ let posInfo = getPosition(s, term);
+ document.getElementById('r_pos').innerText = posInfo.pos + " out of " + posInfo.total + " in " + s.class;
+ document.getElementById('r_best').innerText = "Best Subject: " + bestSub + " (" + bestMark + "%)";
+ document.getElementById('r_remark').innerText = avg>=60 ? "Well Done! Keep It Up." : avg>=40 ? "Keep Working Hard." : "Please See Your Teacher.";
+ showPage('result');
+}
+
+function downloadPDF(){
+  window.print();
+}
+
+function adminLogin(){
+ if(document.getElementById('adminPass').value===ADMIN_PASSWORD){ buildSubjectInputs(); showPage('admin'); showAdminTab('add'); }
+ else alert("Wrong Admin Password!");
+}
+function buildSubjectInputs(){
+ let box=document.getElementById('subjectInputs');
+ box.innerHTML="";
+ SUBJECTS.forEach(sub=>{ box.innerHTML+=`<div><label>${sub}</label><input type="number" id="sub_${sub}" placeholder="0-100" min="0" max="100"></div>`; });
+}
+function saveStudent(){
+ let name=document.getElementById('a_name').value.trim();
+ let exam=document.getElementById('a_exam').value.trim().toUpperCase();
+ let pin=document.getElementById('a_pin').value.trim();
+ let term=document.getElementById('a_term').value;
+ if(!name||!exam||!pin){ alert("Fill Name, Exam Number and PIN"); return; }
+ let results={};
+ SUBJECTS.forEach(sub=>{ let v=document.getElementById('sub_'+sub).value; results[sub]= v===""?0:parseInt(v); });
+ let idx=students.findIndex(x=>x.exam===exam);
+ if(idx>=0){
+   students[idx].name=name; students[idx].class=document.getElementById('a_class').value; students[idx].pin=pin;
+   if(!students[idx].resultsByTerm) students[idx].resultsByTerm={};
+   students[idx].resultsByTerm[term]=results;
+ } else {
+   students.push({name,exam,class:document.getElementById('a_class').value,pin,resultsByTerm:{[term]:results}});
+ }
+ save();
+ document.getElementById('saveMsg').innerText="✅Saved! "+name+" ("+term+") - Login: "+exam+" / "+pin;
+ document.getElementById('a_name').value=""; document.getElementById('a_exam').value=""; document.getElementById('a_pin').value="";
+ SUBJECTS.forEach(sub=> document.getElementById('sub_'+sub).value="");
+}
+
+function renderDashboard(){
+ let term = "Term 1";
+ document.getElementById('d_total').innerText = students.length;
+ let allAvgs = [];
+ let best = null; let bestAvg = -1;
+ let classStats = {};
+ ["Form 1","Form 2","Form 3","Form 4"].forEach(cls=>{
+   let list = students.filter(s=> s.class===cls && s.resultsByTerm && s.resultsByTerm[term]);
+   let sum = 0;
+   list.forEach(s=>{ let a=getAverage(s.resultsByTerm[term], s.class); sum+=a; allAvgs.push(a); if(a>bestAvg){bestAvg=a; best=s;} });
+   classStats[cls] = {count:list.length, avg: list.length? (sum/list.length).toFixed(1): "0.0"};
+ });
+ let schoolAvg = allAvgs.length ? (allAvgs.reduce((a,b)=>a+b,0)/allAvgs.length).toFixed(1) : "0.0";
+ document.getElementById('d_avg').innerText = schoolAvg + "%";
+ document.getElementById('d_bestName').innerText = best ? best.name : "-";
+ document.getElementById('d_bestDetail').innerText = best ? best.class + " - " + bestAvg.toFixed(1) + "%" : "";
+ let topClass = "-"; let topAvg = -1;
+ for(let c in classStats){ if(parseFloat(classStats[c].avg) > topAvg){ topAvg=parseFloat(classStats[c].avg); topClass=c; } }
+ document.getElementById('d_topClass').innerText = topClass + " (" + topAvg + "%)";
+ let html="";
+ for(let c in classStats){ html+=`<tr><td>${c}</td><td>${classStats[c].count}</td><td>${classStats[c].avg}%</td></tr>`; }
+ document.getElementById('d_classTable').innerHTML=html;
+}
+
+function renderList(){
+ let q=document.getElementById('searchBox').value.toLowerCase();
+ let filtered=students.filter(s=> s.name.toLowerCase().includes(q) || s.exam.toLowerCase().includes(q));
+ let html="<table><tr><th>Name</th><th>Exam</th><th>Class</th><th>Terms</th><th>Action</th></tr>";
+ filtered.forEach(s=>{
+   let terms = s.resultsByTerm ? Object.keys(s.resultsByTerm).join(", ") : "Term 1";
+   html+=`<tr><td>${s.name}<br><small>PIN: ${s.pin}</small></td><td>${s.exam}</td><td>${s.class}</td><td><small>${terms}</small></td><td><button style="background:#b71c1c;color:white;border:none;border-radius:5px;padding:6px 10px;cursor:pointer" onclick="deleteStudent('${s.exam}')">Delete</button></td></tr>`;
+ });
+ html+="</table><p style='text-align:center'>Total: "+filtered.length+"</p>";
+ document.getElementById('listBox').innerHTML=html;
+}
+function deleteStudent(exam){ if(confirm("Delete "+exam+"?")){ students=students.filter(s=>s.exam!==exam); save(); renderList(); } }
+function resetData(){ if(confirm("RESET DATA?")){ students=JSON.parse(JSON.stringify(defaultStudents)); save(); renderList(); alert("RESET DONE"); } }
+</script>
+</body>
+</html>
